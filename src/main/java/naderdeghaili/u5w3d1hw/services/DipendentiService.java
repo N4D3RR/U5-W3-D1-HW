@@ -102,6 +102,14 @@ public class DipendentiService {
             throw new RuntimeException(ex);
         }
 
+
+    }
+
+    //FIND BY EMAIL
+    public Dipendente findByEmail(String email) {
+        return this.dipendentiRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Utente con email " + email + " non trovato"));
+
+
     }
 
 }
