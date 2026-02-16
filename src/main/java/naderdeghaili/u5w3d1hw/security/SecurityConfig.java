@@ -20,8 +20,9 @@ public class SecurityConfig {
         httpSecurity.csrf(csrf -> csrf.disable());
 //lavoriamo in modalità stateless
         httpSecurity.sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//
+//ilbera tutti
         httpSecurity.authorizeHttpRequests(request -> request.requestMatchers("/**").permitAll());
+
 
         return httpSecurity.build();
     }

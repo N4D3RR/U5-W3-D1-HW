@@ -3,10 +3,12 @@ package naderdeghaili.u5w3d1hw.security;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import naderdeghaili.u5w3d1hw.entities.Dipendente;
+import naderdeghaili.u5w3d1hw.exceptions.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class JWTTools {
@@ -16,14 +18,18 @@ public class JWTTools {
 
     public String createToken(Dipendente dipendente) {
         return Jwts.builder().issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 30))
+                .expiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(30)))
                 .subject(String.valueOf(dipendente.getId()))
                 .signWith(Keys.hmacShaKeyFor(key.getBytes()))
                 .compact();
 
     }
 
-//    public String verifyToken() {
-//
-//    }
+    public void verifyToken(String token) {
+        try {
+            Jwts.parser().verifyWith(Keys.hmacShaKeyFor(key.getBytes())).build().parse(token);
+        } catch (Exception ex) {
+            throw new UnauthorizedException("effettua il login");
+        }
+    }
 }
